@@ -15,6 +15,7 @@ data "template_file" "cloud_config" {
     bastion_inputrc          = filebase64("${path.module}/inputrc")
     bastion_aliases          = filebase64("${path.module}/bash_aliases")
     bastion_auth_keys        = filebase64("${path.module}/authorized_keys.sh")
+    sshd_config              = filebase64("${path.module}/../../common/sshd_config")
+    pamd_sshd_config         = filebase64("${path.module}/../../common/pamd_sshd_config")
   }
 }
-

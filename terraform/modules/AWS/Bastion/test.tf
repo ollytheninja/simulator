@@ -19,7 +19,7 @@ resource "null_resource" "bastion_test" {
   }
 
   provisioner "file" {
-    source      = "${path.module}/../../scripts/run-goss.sh"
+    source      = "${path.module}/../../common/run-goss.sh"
     destination = "/root/run-goss.sh"
   }
 
@@ -36,4 +36,3 @@ resource "null_resource" "bastion_test" {
     ]
   }
 }
-

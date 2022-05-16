@@ -32,21 +32,13 @@ write_files:
   - path: /etc/pam.d/sshd
     owner: root:root
     permissions: "0644"
-    content: |
-      # Defaults with comments removed and motd disabled
-      @include common-auth
-      account    required     pam_nologin.so
-      @include common-account
-      session [success=ok ignore=ignore module_unknown=ignore default=bad]        pam_selinux.so close
-      session    required     pam_loginuid.so
-      session    optional     pam_keyinit.so force revoke
-      @include common-session
-      session    optional     pam_mail.so standard noenv # [1]
-      session    required     pam_limits.so
-      session    required     pam_env.so # [1]
-      session    required     pam_env.so user_readenv=1 envfile=/etc/default/locale
-      session [success=ok ignore=ignore module_unknown=ignore default=bad]        pam_selinux.so open
-      @include common-password
+    content: !!binary |
+      ${pamd_sshd_config}
+  - path: /etc/ssh/sshd_config
+    owner: root:root
+    permissions: "0644"
+    content: !!binary |
+      ${sshd_config}
 
 runcmd:
   - 'echo "br_netfilter" >> /etc/modules-load.d/k8s.conf && modprobe br_netfilter'

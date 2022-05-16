@@ -43,9 +43,12 @@ func (ls LocalStateProvider) GetSSHKeyPair() (*KeyPair, error) {
 		return nil, errors.Wrap(err, "Error getting process working directory")
 	}
 
-	cm := childminder.NewChildMinder(nil, wd, os.Environ(), "ssh-keygen",
-		"-f", *abspath, "-t", "rsa", "-C",
-		"simulator-key", "-N", "")
+	cm := childminder.NewChildMinder(nil, wd, os.Environ(),
+		"ssh-keygen",
+		"-f", *abspath,
+		"-t", "rsa", "-b", "4096",
+		"-C", "simulator-key",
+		"-N", "")
 	stdout, stderr, err := cm.RunSilently()
 	if err != nil {
 		fmt.Println(*stdout)

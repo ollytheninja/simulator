@@ -60,60 +60,13 @@ write_files:
   - path: /etc/pam.d/sshd
     owner: root:root
     permissions: "0644"
-    content: |
-      # Defaults with comments removed and motd disabled
-      @include common-auth
-      account    required     pam_nologin.so
-      @include common-account
-      session [success=ok ignore=ignore module_unknown=ignore default=bad]        pam_selinux.so close
-      session    required     pam_loginuid.so
-      session    optional     pam_keyinit.so force revoke
-      @include common-session
-      session    optional     pam_mail.so standard noenv # [1]
-      session    required     pam_limits.so
-      session    required     pam_env.so # [1]
-      session    required     pam_env.so user_readenv=1 envfile=/etc/default/locale
-      session [success=ok ignore=ignore module_unknown=ignore default=bad]        pam_selinux.so open
-      @include common-password
+    content: !!binary |
+      ${pamd_sshd_config}
   - path: /etc/ssh/sshd_config
     owner: root:root
     permissions: "0644"
-    content: |
-      # Defaults with comments removed
-      Port 22
-      Protocol 2
-      HostKey /etc/ssh/ssh_host_rsa_key
-      HostKey /etc/ssh/ssh_host_dsa_key
-      HostKey /etc/ssh/ssh_host_ecdsa_key
-      HostKey /etc/ssh/ssh_host_ed25519_key
-      UsePrivilegeSeparation yes
-      KeyRegenerationInterval 3600
-      ServerKeyBits 1024
-      SyslogFacility AUTH
-      LogLevel INFO
-      LoginGraceTime 120
-      PermitRootLogin prohibit-password
-      StrictModes yes
-      RSAAuthentication yes
-      PubkeyAuthentication yes
-      IgnoreRhosts yes
-      RhostsRSAAuthentication no
-      HostbasedAuthentication no
-      PermitEmptyPasswords no
-      ChallengeResponseAuthentication no
-      PasswordAuthentication no
-      X11Forwarding yes
-      X11DisplayOffset 10
-      PrintMotd no
-      PrintLastLog yes
-      TCPKeepAlive no
-      ClientAliveInterval 30
-      ClientAliveCountMax 240
-      # Allow SendEnv of BASE64_SSH_KEY to enable SSHing to the instances in the
-      # private subnet (the kubernetes master and nodes)
-      AcceptEnv BASE64_SSH_KEY LANG LC_*
-      Subsystem sftp /usr/lib/openssh/sftp-server
-      UsePAM yes
+    content: !!binary |
+      ${sshd_config}
 
 output:
   all: "| tee -a /var/log/cloud-init-output.log"
