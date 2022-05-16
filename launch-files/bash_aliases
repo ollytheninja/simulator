@@ -1,3 +1,7 @@
 alias ll='ls --color=auto -lasp'
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
+
+alias sim='simulator'
+alias infra='simulator infra'
+alias sc='simulator scenario'
