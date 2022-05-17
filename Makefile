@@ -152,6 +152,9 @@ test-unit: build ## Run golang unit tests for the CLI program
 	@echo "NOTE YOU SHOULD RUN THESE WITH make docker-test"
 	@echo "+ $@"
 	$(GO) test -race -coverprofile=coverage.txt -covermode=atomic ./...
+	# ssh_test and terraform_test have a race condition because they create their ssh keys in the same location.
+	# Probably need to invert control and pass the config into the ssh module so we can set the ssh key path per test
+	# $(GO) test -p 1 -race -coverprofile=coverage.txt -covermode=atomic ./...
 
 .PHONY: test-cleanup
 test-cleanup: ## Cleans up automated test artefacts if e.g. you ctrl-c abort a test run

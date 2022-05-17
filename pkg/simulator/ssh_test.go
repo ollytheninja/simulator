@@ -9,7 +9,7 @@ import (
 
 func Test_Config(t *testing.T) {
 	t.Skip("Need to mock out terraform output")
-	t.Parallel()
+	// t.Parallel()
 	simulator := simulator.NewSimulator(
 		simulator.WithLogger(logger),
 		simulator.WithTfDir(fixture("noop-tf-dir")),
