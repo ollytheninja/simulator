@@ -60,6 +60,9 @@ module "Kubernetes" {
   iam_instance_profile_id     = module.S3Storage.IamInstanceProfileId
   s3_bucket_name              = module.S3Storage.S3BucketName
   default_tags                = local.aws_tags
+  depends_on = [
+    module.Networking
+  ]
 }
 
 // Setup host within Kubernetes subnet
@@ -74,6 +77,9 @@ module "InternalHost" {
   bastion_public_ip       = module.Bastion.BastionPublicIp
   iam_instance_profile_id = module.S3Storage.IamInstanceProfileId
   s3_bucket_name          = module.S3Storage.S3BucketName
+  depends_on = [
+    module.Networking
+  ]
 }
 
 // Create S3 bucket to share Kubernetes join details between
